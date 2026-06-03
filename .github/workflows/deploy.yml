@@ -1,0 +1,23 @@
+name: Deploy Blog to PKU Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to Cloud Server via IPv6
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rlgoDzvO --delete"
+        SOURCE: "./index.html"
+        REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+        REMOTE_USER: root
+        TARGET: "/var/www/html/"
